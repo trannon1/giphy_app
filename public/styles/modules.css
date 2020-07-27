@@ -1,12 +1,19 @@
 .square {
-    border: 1px solid black;
     margin: 30px;
     display: grid;
     grid-template-columns: minmax(300px, 70%);
     justify-items: center;
     align-items: center;
     justify-content: center;
+    max-width: 500px;
+    max-height: 500px;
 }
+
+img { 
+    width: 300px; 
+    height: 300px; 
+    object-fit: contain; 
+} 
 
 .editDetails {
     display: none;

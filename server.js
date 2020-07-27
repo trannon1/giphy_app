@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded ({ extended: true, }));
 app.use(methodOverride('_method'));
 
-// app.get('/', getBooks);
+app.get('/', getTrending);
 // app.post('/searches', getBookInfo);
 // app.get('/searches/new', getForm);
 // app.post('/', insertIntoDatabase);
@@ -22,40 +22,44 @@ app.use(methodOverride('_method'));
 // app.put('/books/updatebook', updateBook);
 // app.delete('/delete/deletebook', deleteBook);
 
+// app.get('/', function(req, res) {
+//   res.render('pages/searches/show');
+// });
+
 // function getForm(request, response){
 //   response.render('pages/searches/new');
 // }
 
-// function getBookInfo(request, response){
+function getTrending(request, response){
 
-//   let url = 'https://www.googleapis.com/books/v1/volumes?q=';
-//   let typeOfSearch = request.body.search[1];
-//   let searchCriteria = request.body.search[0];
+  let url = `api.giphy.com/v1/gifs/trending?api_key=${process.env.GIPHYAPIKEY}`;
+  // let typeOfSearch = request.body.search[1];
+  // let searchCriteria = request.body.search[0];
 
-//   if(typeOfSearch === 'author'){
-//     url += `+inauthor:${searchCriteria}`;
-//   }
+  // if(typeOfSearch === 'author'){
+  //   url += `+inauthor:${searchCriteria}`;
+  // }
 
-//   if(typeOfSearch === 'title'){
-//     url += `+intitle:${searchCriteria}`;
-//   }
+  // if(typeOfSearch === 'title'){
+  //   url += `+intitle:${searchCriteria}`;
+  // }
 
-//   superagent.get(url)
-//     .then(res => {
-//       let tenBooksArray = [];
-//       for (let i = 0; i < 10; i++){
-//         tenBooksArray.push(res.body.items[i]);
-//       }
-//       let bookArray = tenBooksArray.map(book => {
-//         return new Book(book.volumeInfo);
-//       });
-//       response.render('pages/searches/show', {bookArray: bookArray});
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       response.render('pages/error');
-//     });
-// }
+  superagent.get(url)
+    .then(res => {
+      let gifsArray = [];
+      for (let i = 0; i < Object.keys(res.body.data).length; i++){
+        gifsArray.push(res.body.data[i]);
+      }
+      let gifsList = gifsArray.map(gif => {
+        return new Gifs(gif);
+      });
+      response.render('pages/searches/show', {gifsList: gifsList});
+    })
+    .catch(error => {
+      console.log(error);
+      response.render('pages/error');
+    });
+}
 
 // function getBooks(request, response){
 //   let sql = 'SELECT * FROM books;';
@@ -125,15 +129,16 @@ app.use(methodOverride('_method'));
 //     });
 // }
 
-// function Book(bookObj){
-//   const placeholderImage = `https://i.imgur.com/J5LVHEL.jpg`;
-//   bookObj.imageLinks.thumbnail !== null ? this.image = bookObj.imageLinks.thumbnail : this.image = placeholderImage;
-//   this.image.substring(0,5) != 'https'? this.image = this.image.substring(0,4) + 's' + this.image.substring(4, this.image.length): this.image;
-//   bookObj.title !== null ? this.title = bookObj.title : this.title = 'no title available';
-//   bookObj.authors !== null ? this.authors = bookObj.authors : this.authors = 'no author available';
-//   bookObj.description !== null ? this.description = bookObj.description : this.description = 'no description available';
-//   bookObj.industryIdentifiers[0].identifier !== null ? this.isbn = bookObj.industryIdentifiers[0].identifier : this.isbn = 'no isbn available';
-// }
+function Gifs(gifObj){
+  const placeholderImage = `https://i.imgur.com/J5LVHEL.jpg`;
+  gifObj.images.original.url !== null ? this.image_url = gifObj.images.original.url : this.image = placeholderImage;
+  // this.image.substring(0,5) != 'https'? this.image = this.image.substring(0,4) + 's' + this.image.substring(4, this.image.length): this.image;
+  gifObj.title !== null ? this.title = gifObj.title : this.title = 'no title available';
+  gifObj.username !== null ? this.username = gifObj.username : this.username = 'no user available';
+  gifObj.id !== null ? this.id = gifObj.id : this.id = 'no id available';
+  gifObj.rating !== null ? this.rating = gifObj.rating : this.rating = 'no rating available';
+  gifObj.url !== null ? this.url = gifObj.url : this.url = 'no url available';
+}
 
 function handleError(request, response, error) {
   console.error(error);
