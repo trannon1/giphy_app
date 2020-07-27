@@ -1,0 +1,21 @@
+{
+  "name": "giphy_app",
+  "version": "1.0.0",
+  "description": "**Author**: Bryan Tran, Steven Miyauchi - Pair Program\r **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "superagent": "^5.3.1"
+  }
+}
