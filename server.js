@@ -14,7 +14,10 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded ({ extended: true, }));
 app.use(methodOverride('_method'));
 
-app.get('/', getTrending);
+app.get('/', getMainPage);
+app.get('/trendingGif', getTrendingGif);
+app.get('/trendingSticker', getTrendingSticker);
+app.post('/search', getSearch);
 // app.post('/searches', getBookInfo);
 // app.get('/searches/new', getForm);
 // app.post('/', insertIntoDatabase);
@@ -30,19 +33,13 @@ app.get('/', getTrending);
 //   response.render('pages/searches/new');
 // }
 
-function getTrending(request, response){
+function getMainPage(request, response){
+  response.render('pages/index');
+}
+
+function getTrendingGif(request, response){
 
   let url = `api.giphy.com/v1/gifs/trending?api_key=${process.env.GIPHYAPIKEY}`;
-  // let typeOfSearch = request.body.search[1];
-  // let searchCriteria = request.body.search[0];
-
-  // if(typeOfSearch === 'author'){
-  //   url += `+inauthor:${searchCriteria}`;
-  // }
-
-  // if(typeOfSearch === 'title'){
-  //   url += `+intitle:${searchCriteria}`;
-  // }
 
   superagent.get(url)
     .then(res => {
@@ -53,7 +50,59 @@ function getTrending(request, response){
       let gifsList = gifsArray.map(gif => {
         return new Gifs(gif);
       });
-      response.render('pages/searches/show', {gifsList: gifsList});
+      response.render('pages/searches/trending', {gifsList: gifsList});
+    })
+    .catch(error => {
+      console.log(error);
+      response.render('pages/error');
+    });
+}
+
+function getTrendingSticker(request, response){
+
+  let url = `api.giphy.com/v1/stickers/trending?api_key=${process.env.GIPHYAPIKEY}`;
+
+  superagent.get(url)
+    .then(res => {
+      let gifsArray = [];
+      for (let i = 0; i < Object.keys(res.body.data).length; i++){
+        gifsArray.push(res.body.data[i]);
+      }
+      let gifsList = gifsArray.map(gif => {
+        return new Gifs(gif);
+      });
+      response.render('pages/searches/trending', {gifsList: gifsList});
+    })
+    .catch(error => {
+      console.log(error);
+      response.render('pages/error');
+    });
+}
+
+function getSearch(request, response){
+
+  let url = `api.giphy.com/v1/`;
+  let typeOfSearch = request.body.search[1];
+  let searchCriteria = request.body.search[0];
+
+  if(typeOfSearch === 'gif'){
+    url += `gifs/search?api_key=${process.env.GIPHYAPIKEY}&q=` + searchCriteria;
+  }
+
+  if(typeOfSearch === 'sticker'){
+    url += `stickers/search?api_key=${process.env.GIPHYAPIKEY}&q=` + searchCriteria;
+  }
+
+  superagent.get(url)
+     .then(res => {
+      let gifsArray = [];
+      for (let i = 0; i < Object.keys(res.body.data).length; i++){
+        gifsArray.push(res.body.data[i]);
+      }
+      let gifsList = gifsArray.map(gif => {
+        return new Gifs(gif);
+      });
+      response.render('pages/searches/search', {gifsList: gifsList});
     })
     .catch(error => {
       console.log(error);

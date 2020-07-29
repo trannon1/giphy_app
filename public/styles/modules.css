@@ -13,6 +13,7 @@ img {
     width: 300px; 
     height: 300px; 
     object-fit: contain; 
+    border: 5px solid #555;
 } 
 
 .editDetails {

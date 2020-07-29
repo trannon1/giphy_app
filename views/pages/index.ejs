@@ -24,6 +24,32 @@
         </ul>
     </div>
     <% */ %>
+
+    <div>
+      <button onclick="location.href = '/trendingGif';">Trending Gifs</button>
+      <button onclick="location.href = '/trendingSticker';">Trending Stickers</button>
+
+      <h4>Search for gifs/stickers</h4>
+      <!-- action visits the route and method is the route method -->
+      <form action='/search' method='post'>
+        <input type="text" name="search" placeholder="Enter something" required>
+        <fieldset>
+          <label for="Gif">
+            <span>Gif</span>
+            <input type="radio" name="search" value="gif" required>
+          </label>
+        </fieldset>
+
+        <fieldset>
+            <label for="Sticker">
+              <span>Sticker</span>
+              <input type="radio" name="search" value="sticker" required>
+            </label>
+          </fieldset>
+          <button type="submit">Search</button>
+      </form>
+    </div>
+
   </container>
 </body>
 </html>

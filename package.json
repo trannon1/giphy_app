@@ -1,7 +1,7 @@
 {
   "name": "giphy_app",
   "version": "1.0.0",
-  "description": "**Author**: Bryan Tran, Steven Miyauchi - Pair Program\r **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)",
+  "description": "**Author**: Bryan Tran\r **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)",
   "main": "server.js",
   "directories": {
     "lib": "lib"

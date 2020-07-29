@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../../layout/head') %>
+<body>
+    <%- include('../../layout/header') %>
+    <div class = "container">
+            <% gifsList.forEach(gif => { %>
+                <div class="square">
+                    <img src=<%= gif.image_url %>>
+                    <ul>
+                        <li>ID: <%= gif.id %></li>
+                        <li>Title: <%= gif.title %></li>
+                        <li>User: <%= gif.username %></li>
+                        <li>Rating: <%= gif.rating %></li>
+                        <li>Url: <%= gif.url %></li>
+                    </ul>
+                </div>
+            <% }) %>
+    </div>
+</body>
+</html>
